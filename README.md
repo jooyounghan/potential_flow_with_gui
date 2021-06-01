@@ -5,15 +5,12 @@ Use delaunany triangulation and delaunany refinement with chew's algorthim
 
 ***
 ## How To
-Program is expressed with ```nana``` GUI.
+Program is expressed with ```nana``` GUI. and has 5 steps for working.
 
 When Code runs, then initial page will be opened.
 
 ![초기화면](https://user-images.githubusercontent.com/62648344/120256764-d2748a00-c2c9-11eb-8b00-65a35eeb769a.png)
 
-+ Domain Setting
-
-Program has 5 steps for working.
 + Setiing Domain
   ++ Set the Domain's Width and Height.
   
