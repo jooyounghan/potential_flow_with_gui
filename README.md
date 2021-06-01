@@ -3,6 +3,7 @@
 
 Use delaunany triangulation and delaunany refinement with chew's algorthim 
 
+(Solution file is not uploaded because of the Volume of the file.. ㅠㅠ)
 ***
 ## How To
 Program is expressed with ```nana``` GUI.
