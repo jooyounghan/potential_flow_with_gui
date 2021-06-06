@@ -93,7 +93,11 @@ You can also check the graphical result with clicking **_View Result_**. Matplot
 ***
 ### TO DO
 + This Code has problem with generating mesh when two obstacles approach nearly each other
-![problem](https://user-images.githubusercontent.com/62648344/120910431-011fa580-c6ba-11eb-8420-888eb768593c.png)
+  
+  (Distortion of the Triangulation occurs)
+  
+![problem](https://user-images.githubusercontent.com/62648344/120910503-64113c80-c6ba-11eb-9d6c-b05468f53a84.png)
+
   To deal with this problem, function ```remove_after()``` has to be modified.
 
 + I'm afraid that this program only works for certain conditions.
