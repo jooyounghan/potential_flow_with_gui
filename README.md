@@ -92,6 +92,10 @@ You can also check the graphical result with clicking **_View Result_**. Matplot
 
 ***
 ### TO DO
++ This Code has problem with generating mesh when two obstacles approach nearly each other
+![problem](https://user-images.githubusercontent.com/62648344/120910431-011fa580-c6ba-11eb-8420-888eb768593c.png)
+  To deal with this problem, function ```remove_after()``` has to be modified.
+
 + I'm afraid that this program only works for certain conditions.
   
   if obstacle is small or far from the domain boundary, then chew's algorithm meets the problem for refining triangles.
