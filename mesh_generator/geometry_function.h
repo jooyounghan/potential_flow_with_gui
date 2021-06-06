@@ -50,10 +50,10 @@ std::vector<vertex> generate_rect_vertex(const double& x_loc, const double& y_lo
 std::vector<vertex> generate_circ_vertex(const double& x_loc, const double& y_loc, const double& rad)
 {
 	std::vector<vertex> vt_set;
-	double degree_divider = 2.0 * PI / circle_vertex_num;
+	double degree_divider = 360 / circle_vertex_num;  //360 / 30 = 12;
 	for (int i = 0; i < circle_vertex_num; i += 1)
 	{
-		vt_set.push_back(vertex(x_loc + rad * std::cos(degree_divider * i), y_loc + rad * std::sin((degree_divider * i))));
+		vt_set.push_back(vertex(x_loc + rad * std::cos(degree_divider * i * 2 * PI / 360), y_loc + rad * std::sin((degree_divider * i * 2 * PI / 360))));
 	}
 	return vt_set;
 }
@@ -141,6 +141,7 @@ void serial_delaunay(std::vector<vertex>& vt_set_in, std::vector<triangle>& tri_
 	}
 	std::cout << "Delaunay Triangulation Completed" << std::endl;
 }
+
 
 std::vector<int> async_compare_vertices_set(std::vector<vertex>& base_vt_set, std::vector<vertex>& compared_vt_set)
 {;

@@ -204,7 +204,7 @@ public:
 		std::cout << "Removing Completed" << std::endl;
 	}
 
-	void remove_after()
+	void remove_after() // TODO : NEEDS TO BE MODIFIED
 	{
 		std::cout << "Removing Dot And Triangle Which is in the Obstacle..." << std::endl;
 		std::mutex mtx;
@@ -258,42 +258,54 @@ public:
 		for (int i = 0; i < refinement_task.size(); i += 1)
 		{
 			refinement_task[i] = std::async([&, i] {
-				//when using std::async[&], async funciton call after i becomes refinement_task.size(), so vector subscript problem occurs.
+				//when using std::async[&], i becomes refinement_task.size() (because it is called at last, so vector subscript problem occurs.
+				//To deal with this problem, we have to copy data to each thread's stack.
 				std::vector<triangle> distorted_region;
 				std::vector<triangle> distorted_triangle;
+				// Check the Triagle which has the vertex in the obstacle and put in in the distorted_triangle
+				mtx.lock();
 				for (int j = 0; j < tri_set.size(); j += 1)
 				{
 					if (obstacle_set[i]->is_inner_vertex(tri_set[j].vt_1) || obstacle_set[i]->is_inner_vertex(tri_set[j].vt_2) || obstacle_set[i]->is_inner_vertex(tri_set[j].vt_3))
 					{
 						distorted_triangle.push_back(tri_set[j]);
-						mtx.lock();
+
 						std::swap(tri_set[j], tri_set[tri_set.size() - 1]);
 						tri_set.pop_back();
-						mtx.unlock();
 						j -= 1;
 					}
 				}
+				mtx.unlock();
+
 				while (distorted_triangle.size() > 0)
 				{
+					// distorted triangle is defined in the stack area, so data sharing not occur(we don't need to use mtx.lock() here.
 					distorted_region.push_back(distorted_triangle[0]);
 					std::swap(distorted_triangle[0], distorted_triangle[distorted_triangle.size() - 1]);
 					distorted_triangle.pop_back();
 					
-					vertex inner_vertex;
-					if(obstacle_set[i]->is_inner_vertex(distorted_region[0].vt_1)) { inner_vertex = distorted_region[0].vt_1;}
-					else if (obstacle_set[i]->is_inner_vertex(distorted_region[0].vt_2)) { inner_vertex = distorted_region[0].vt_2; }
-					else { inner_vertex = distorted_region[0].vt_3; }
+					std::set<vertex> inner_vertex;
+					if (obstacle_set[i]->is_inner_vertex(distorted_region[0].vt_1)) { inner_vertex.insert(distorted_region[0].vt_1);}
+					if (obstacle_set[i]->is_inner_vertex(distorted_region[0].vt_2)) { inner_vertex.insert(distorted_region[0].vt_2); }
+					if (obstacle_set[i]->is_inner_vertex(distorted_region[0].vt_3)) { inner_vertex.insert(distorted_region[0].vt_3); }
+
 
 					for (int j = 0; j < distorted_triangle.size(); j += 1)
 					{
 						if (distorted_triangle[j].find_vertex(inner_vertex))
 						{
+							bool new_inner_vertex = false;
+							if (obstacle_set[i]->is_inner_vertex(distorted_triangle[j].vt_1)) { new_inner_vertex = true; inner_vertex.insert(distorted_triangle[j].vt_1); }
+							if (obstacle_set[i]->is_inner_vertex(distorted_triangle[j].vt_2)) { new_inner_vertex = true; inner_vertex.insert(distorted_triangle[j].vt_2); }
+							if (obstacle_set[i]->is_inner_vertex(distorted_triangle[j].vt_3)) { new_inner_vertex = true; inner_vertex.insert(distorted_triangle[j].vt_3); }
 							distorted_region.push_back(distorted_triangle[j]);
 							std::swap(distorted_triangle[j], distorted_triangle[distorted_triangle.size() - 1]);
 							distorted_triangle.pop_back();
-							j -= 1;
+							if (new_inner_vertex) { j = -1; }
+							else { j -= 1; }
 						}
 					}
+
 					std::set<vertex> local_delaunay_vertex;
 					for (auto& tri : distorted_region)
 					{
@@ -356,7 +368,9 @@ public:
 					}
 					for (int j = 0; j < local_delaunay_triangle.size(); j += 1)
 					{
+						mtx.lock();
 						tri_set.push_back(local_delaunay_triangle[j]);
+						mtx.unlock();
 						std::swap(local_delaunay_triangle[j], local_delaunay_triangle[local_delaunay_triangle.size() - 1]);
 						local_delaunay_triangle.pop_back();
 						j--;

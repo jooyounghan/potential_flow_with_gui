@@ -118,10 +118,14 @@ public:
 		: vt_1(li.vt_1), vt_2(li.vt_2), vt_3(v_in)
 	{}
 
-	bool find_vertex(const vertex& vt_in) const
+	bool find_vertex(std::set<vertex>& vt_set_in) const
 	{
-		if (vt_1 == vt_in || vt_2 == vt_in || vt_3 == vt_in) { return true; }
-		else { return false; }
+		for (auto &vt : vt_set_in)
+		{
+			if (vt_1 == vt || vt_2 == vt || vt_3 == vt) { return true; }
+			else { continue; }
+		}
+		return false;
 	}
 
 	bool in_circum(const vertex& vt_in) const
