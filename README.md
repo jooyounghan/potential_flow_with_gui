@@ -96,10 +96,12 @@ You can also check the graphical result with clicking **_View Result_**. Matplot
   
   (Distortion of the Triangulation occurs)
   
+  
+  To deal with this problem, function ```remove_after()``` has to be modified.
+  
 ![problem](https://user-images.githubusercontent.com/62648344/120910503-64113c80-c6ba-11eb-9d6c-b05468f53a84.png)
 
-  To deal with this problem, function ```remove_after()``` has to be modified.
-   * Problem Solved with modification ('21. 6. 6)
+  Problem Solved with modification ('21. 6. 6)
 
 + I'm afraid that this program only works for certain conditions.
   
