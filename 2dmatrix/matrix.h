@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include "../2dmatrix/function_parallel.h"
-
+#include "../timer.h"
 class matrix
 {
 private :
@@ -155,10 +155,11 @@ public:
 
 		matrix dum{ this->m_mat };
 		matrix inverse{ identity(row_num) };
-		gje_inv_pivot(dum.m_mat, inverse.m_mat);
-		async_forward_elimination(dum.m_mat, inverse.m_mat);
-		async_backward_elimination(dum.m_mat, inverse.m_mat);
-		gje_diagonal_to_one(dum.m_mat, inverse.m_mat);
+		serial_gje_forward_elimination(dum.m_mat, inverse.m_mat);
+		serial_gje_backward_elimination(dum.m_mat, inverse.m_mat);
+		//async_forward_elimination(dum.m_mat, inverse.m_mat, dum.row_num, dum.col_num);
+		//async_backward_elimination(dum.m_mat, inverse.m_mat, dum.row_num, dum.col_num);
+		gje_diagonal_to_one(dum.m_mat, inverse.m_mat, dum.row_num, dum.col_num);
 		return inverse;
 	}
 

@@ -139,7 +139,6 @@ public:
 
 	void insert(obstacle_shape* obs)
 	{
-		std::mutex mtx;
 		std::vector<vertex>& obs_vector = obs->get_vector();
 		std::vector<std::future<void>> compare_task;
 		compare_task.resize(obs_vector.size());
@@ -207,7 +206,6 @@ public:
 	void remove_after() // TODO : NEEDS TO BE MODIFIED
 	{
 		std::cout << "Removing Dot And Triangle Which is in the Obstacle..." << std::endl;
-		std::mutex mtx;
 		std::vector<std::future<void>> remove_task;
 		remove_task.resize(2);
 		remove_task[0] = std::async([&] {

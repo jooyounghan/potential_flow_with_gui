@@ -2,7 +2,44 @@
 #include <future>
 #include <vector>
 #include "../2dmatrix/pointer_function.h"
-#include <mutex>
+
+void gje_inv_pivot(double**& origin, double**& identity, const int& idx, const int& row_num, const int& col_num)
+{
+	assert(("numbers of row and column has to be same", row_num == col_num));
+	assert(("sizes between two matrixes have to be same", row_num == static_cast<int>(_msize(identity)) / sizeof(double*) && col_num == static_cast<int>(_msize(identity[0])) / sizeof(double)));
+	if (std::abs(origin[idx][idx]) < EPSILON)
+	{
+		for (int i = idx; i < row_num; i += 1)
+		{
+			if (std::abs(origin[i][idx]) > std::abs(origin[idx][idx]))
+			{ swap_row(idx, idx + 1, origin); swap_row(idx, idx + 1, identity); break; }
+		}
+	}
+}
+
+void gje_diagonal_to_one(double**& mat, double**& iden, const int& row_num, const int& col_num)
+{
+	for (int i = 0; i < row_num; i += 1)
+	{
+		double divider = mat[i][i];
+		mat[i][i] = mat[i][i] / divider;
+		for (int j = 0; j < col_num; j += 1)
+		{
+			iden[i][j] = iden[i][j] / divider;
+		}
+	}
+}
+
+void gje_elimination(double**& mat, double**& iden, const int& base_idx, const int& calc_idx, const int& row_num, const int& col_num)
+{
+	double fact = mat[calc_idx][base_idx] / mat[base_idx][base_idx];
+	for (int j = 0; j < col_num; j += 1)
+	{
+		mat[calc_idx][j] = mat[calc_idx][j] - fact * mat[base_idx][j];
+		iden[calc_idx][j] = iden[calc_idx][j] - fact * iden[base_idx][j];
+	}
+}
+
 
 void async_data_assign(double**& mat, double**& mat_other)
 {
@@ -50,90 +87,84 @@ void async_data_assign(double**& mat, const double &init)
 	}
 }
 
-void async_forward_elimination(double**& mat, double**& iden)
+void async_forward_elimination(double**& mat, double**& iden, const int& row_num, const int& col_num)
 {
-	int row_num = static_cast<int>(_msize(mat)) / sizeof(double*);
-	std::vector<std::future<void>> future_vector;
-	std::vector<int> task_allocation;
-	future_vector.resize(concurrency_num);
-	task_allocation.resize(concurrency_num);
-	for (int base = 0; base < (row_num - 1); base += 1)
+	for (int i = 0; i < row_num; i += 1)
 	{
-
-		int all_task = row_num - 1 - base;
-		int num_divided = all_task / concurrency_num; // round down by dividing with integer
-
-		//task assignment
-		for (int i = 0; i < concurrency_num; i += 1)
+		gje_inv_pivot(mat, iden, i, row_num, col_num);
+		std::vector<std::future<void>> task_vector;
+		task_vector.resize(row_num - (i + 1));
+		for (int j = 0; j < task_vector.size(); j += 1)
 		{
-			task_allocation[i] = num_divided;
+			int calc_idx = i + 1 + j;
+			task_vector[j] = std::async(gje_elimination, std::ref(mat), std::ref(iden), i, calc_idx, std::ref(row_num), std::ref(col_num));
 		}
-		for (int j = 0; j < concurrency_num; j += 1)
+		for (int j = 0; j < task_vector.size(); j += 1)
 		{
-			if ((all_task - num_divided * concurrency_num) == 0) { break; }
-			task_allocation[j] += 1;
-			all_task -= 1;
-		}
-
-		int start_task_idx = base + 1;
-		unsigned int start_idx = 0;
-		for (auto& task : task_allocation)
-		{
-			if (task == 0) { continue; }
-			future_vector[start_idx] = std::async(gje_forward_elimination, std::ref(mat), std::ref(iden), base, start_task_idx, start_task_idx + task - 1);
-			start_idx += 1;
-			start_task_idx += task;
-		}
-		for (int i = 0; i < concurrency_num; i += 1)
-		{
-			if (task_allocation[i] == 0) { continue; }
-			else { future_vector[i].wait(); }
+			task_vector[j].wait();
 		}
 	}
 }
 
-void async_backward_elimination(double**& mat, double**& iden)
+void async_backward_elimination(double**& mat, double**& iden, const int& row_num, const int& col_num)
 {
-	int row_num = static_cast<int>(_msize(mat)) / sizeof(double*);
-	std::vector<std::future<void>> future_vector;
-	std::vector<int> task_allocation;
-	future_vector.resize(concurrency_num);
-	task_allocation.resize(concurrency_num);
-	for (int base = (row_num - 1); base > 0; base -= 1)
+	for (int i = (row_num - 1); i >= 0; i -= 1)
 	{
-
-		int all_task = base;
-		int num_divided = all_task / concurrency_num; // round down by dividing with integer
-
-		//task allocation
-		for (int i = 0; i < concurrency_num; i += 1)
+		std::vector<std::future<void>> task_vector;
+		task_vector.resize(i);
+		for (int j = 0; j < task_vector.size(); j += 1)
 		{
-			task_allocation[i] = num_divided;
+			task_vector[j] = std::async(gje_elimination, std::ref(mat), std::ref(iden), i, j, std::ref(row_num), std::ref(col_num));
 		}
-		for (int j = 0; j < concurrency_num; j += 1)
+		for (int j = 0; j < task_vector.size(); j += 1)
 		{
-			if ((all_task - num_divided * concurrency_num) == 0) { break; }
-			task_allocation[j] += 1;
-			all_task -= 1;
-		}
-
-		int start_task_idx = base - 1;
-		unsigned int start_idx = 0;
-		for (auto& task : task_allocation)
-		{
-			if (task == 0) { continue; }
-			future_vector[start_idx] = std::async(gje_backward_elimination, std::ref(mat), std::ref(iden), base, start_task_idx, start_task_idx - task + 1);
-			start_idx += 1;
-			start_task_idx -= task;
-
-		}
-		for (int i = 0; i < concurrency_num; i += 1)
-		{
-			if (task_allocation[i] == 0) { continue; }
-			else { future_vector[i].wait(); }
+			task_vector[j].wait();
 		}
 	}
 }
+
+//serial_gje_method for comparing
+
+void serial_gje_forward_elimination(double**& mat, double**& iden)
+{
+	int row_num = _msize(mat) / sizeof(double*);
+	int col_num = _msize(mat[0]) / sizeof(double);
+	for (int i = 0; i < row_num - 1; i += 1)
+	{
+		gje_inv_pivot(mat, iden, i, row_num, col_num);
+		for (int j = i + 1; j < row_num; j += 1)
+		{
+			double fact = mat[j][i] / mat[i][i];
+			for (int k = 0; k < col_num; k += 1)
+			{
+				mat[j][k] = mat[j][k] - fact * mat[i][k];
+				iden[j][k] = iden[j][k] - fact * iden[i][k];
+			}
+		}
+	}
+}
+
+void serial_gje_backward_elimination(double**& mat, double**& iden)
+{
+	int row_num = _msize(mat) / sizeof(double*);
+	int col_num = _msize(mat[0]) / sizeof(double);
+	for (int i = 0; i < row_num - 1; i += 1)
+	{
+		for (int j = i + 1; j < row_num; j += 1)
+		{
+			double fact = mat[row_num - 1 - j][row_num - 1 - i] / mat[row_num - 1 - i][row_num - 1 - i];
+			for (int k = 0; k < col_num; k += 1)
+			{
+				mat[row_num - 1 - j][col_num - 1 - k] = mat[row_num - 1 - j][col_num - 1 - k] - fact * mat[row_num - 1 - i][col_num - 1 - k];
+				iden[row_num - 1 - j][col_num - 1 - k] = iden[row_num - 1 - j][col_num - 1 - k] - fact * iden[row_num - 1 - i][col_num - 1 - k];
+			}
+		}
+	}
+}
+
+
+
+
 double** async_mat_mul(double**& mat_1, double**& mat_2, const int& r_row, const int& r_col, const int&k_col)
 {
 	double** result = generate(r_row, r_col);

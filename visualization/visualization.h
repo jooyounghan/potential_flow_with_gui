@@ -122,7 +122,7 @@ public :
                 rectangle_output.close();
             }
 
-            if (circle_exist || rectangle_exist) { /* delaunay triangulation */ }
+            if (circle_exist || rectangle_exist){ /* delaunay triangulation */ }
             else
             {
                 nana::msgbox mb(main_pg, "No Obstacle Input");

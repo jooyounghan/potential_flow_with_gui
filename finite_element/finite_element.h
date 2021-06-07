@@ -66,6 +66,7 @@ public:
 			matrix bbt = (b * bt);
 			matrix cct = (c * ct);
 			g_part = (bbt + cct) * tri.get_area();
+			
 			std::vector<int> queue_idx = async_compare_vertices_set(*vt_set_ptr, queue);
 
 			for (int i = 0; i < queue_idx.size(); i += 1)
@@ -76,7 +77,6 @@ public:
 				}
 			}
 		}
-		// set·Î º¯°æ?
 		std::vector<line> inlet_line_set;
 		for (auto& tri : *tri_set_ptr)
 		{

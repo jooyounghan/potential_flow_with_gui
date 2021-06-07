@@ -8,7 +8,6 @@ void chew(std::vector<vertex>& vt_set_in, std::vector<triangle>& tri_set_in, std
 	while (skinny_tri_set_in.size() > 0)
 	{
 		vertex vt_in = skinny_tri_set_in[0].get_circum_center();
-
 		vt_set_in.push_back(vt_in);
 
 		std::set<line> polygon;
