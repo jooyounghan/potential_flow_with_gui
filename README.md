@@ -103,6 +103,8 @@ You can also check the graphical result with clicking **_View Result_**. Matplot
 
   Problem Solved with modification ('21. 6. 6)
 
+![image](https://user-images.githubusercontent.com/62648344/121369800-23921700-c977-11eb-985e-8804e745773d.png)
+
 + I'm afraid that this program only works for certain conditions.
   
   if obstacle is small or far from the domain boundary, then chew's algorithm meets the problem for refining triangles.
