@@ -1,0 +1,9 @@
+﻿  matirx_main.cpp
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(80,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(107,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(270,2): warning C4002: 함수 같은 매크로 호출 'assert'에 대해 인수가 너무 많습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(271,2): warning C4002: 함수 같은 매크로 호출 'assert'에 대해 인수가 너무 많습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(272,2): warning C4002: 함수 같은 매크로 호출 'assert'에 대해 인수가 너무 많습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(339,2): warning C4002: 함수 같은 매크로 호출 'assert'에 대해 인수가 너무 많습니다.
+C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Matrix\pointer_function.h(340,2): warning C4002: 함수 같은 매크로 호출 'assert'에 대해 인수가 너무 많습니다.
+  Matrix.vcxproj -> C:\Users\Younghan\Desktop\Project\2dmatrix\Matrix\Debug\Matrix.exe

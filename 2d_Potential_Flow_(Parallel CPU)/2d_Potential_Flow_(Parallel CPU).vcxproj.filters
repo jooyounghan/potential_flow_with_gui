@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일\2dmatirx">
+      <UniqueIdentifier>{e5ab138b-8114-4251-9d07-bc3dd9009dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\visualization">
+      <UniqueIdentifier>{597e8886-ac67-4d7e-9ac5-9e53053e629b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\finite_element_method">
+      <UniqueIdentifier>{5b1c5fe8-f523-4f58-9263-7004207e56d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\mesh_generator">
+      <UniqueIdentifier>{d8eea4bc-27aa-434a-9bcf-b924d588e4c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="2dmatrix\function_parallel.h">
+      <Filter>헤더 파일\2dmatirx</Filter>
+    </ClInclude>
+    <ClInclude Include="2dmatrix\matrix.h">
+      <Filter>헤더 파일\2dmatirx</Filter>
+    </ClInclude>
+    <ClInclude Include="2dmatrix\pointer_function.h">
+      <Filter>헤더 파일\2dmatirx</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_generator\chew_algorithm.h">
+      <Filter>헤더 파일\mesh_generator</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_generator\geometry.h">
+      <Filter>헤더 파일\mesh_generator</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_generator\geometry_function.h">
+      <Filter>헤더 파일\mesh_generator</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_generator\polygon.h">
+      <Filter>헤더 파일\mesh_generator</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_generator\ruppert_algorithm.h">
+      <Filter>헤더 파일\mesh_generator</Filter>
+    </ClInclude>
+    <ClInclude Include="visualization\visualization.h">
+      <Filter>헤더 파일\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="visualization\visualization_function.h">
+      <Filter>헤더 파일\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="visualization\visualization_sub_program.h">
+      <Filter>헤더 파일\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="finite_element\finite_element.h">
+      <Filter>헤더 파일\finite_element_method</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="matirx_main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
