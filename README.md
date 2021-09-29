@@ -1,7 +1,7 @@
 # Potential_flow_with_nana_gui
 **_2D Potential Flow Analysis_** with finite element method.
 
-(NEED nana opensource!
+(NEED nana opensource!)
 
 ```bash
 > vcpkg install nana
@@ -9,7 +9,6 @@
 
 Use delaunany triangulation and delaunany refinement with chew's algorthim 
 
-(Solution file is not uploaded because of the Volume of the file.. ㅠㅠ)
 ***
 ## How To
 Program is expressed with ```nana``` GUI.
